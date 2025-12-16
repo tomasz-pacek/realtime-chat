@@ -5,21 +5,31 @@ import { authMiddleware } from "./auth";
 import * as z from "zod";
 import { Message, realtime } from "@/lib/realtime";
 
-const ROOM_TTL_SECONDS = 60 * 10; //10mins
-
 const rooms = new Elysia({ prefix: "/room" })
-  .post("/create", async () => {
-    const roomId = nanoid();
+  .post(
+    "/create",
+    async ({ body }) => {
+      const roomId = nanoid();
+      const { ttl } = body;
 
-    await redis.hset(`meta:${roomId}`, {
-      connected: [],
-      createdAt: Date.now(),
-    });
+      await redis.hset(`meta:${roomId}`, {
+        connected: [],
+        createdAt: Date.now(),
+      });
 
-    await redis.expire(`meta:${roomId}`, ROOM_TTL_SECONDS);
+      await redis.expire(`meta:${roomId}`, ttl * 60);
 
-    return { roomId };
-  })
+      return { roomId };
+    },
+    {
+      body: z.object({
+        ttl: z
+          .number()
+          .min(1, "Room lifetime must be at least 1 minute.")
+          .max(60, "Room lifetime cannot be longer than 60 minutes."),
+      }),
+    }
+  )
   .use(authMiddleware)
   .get(
     "/ttl",

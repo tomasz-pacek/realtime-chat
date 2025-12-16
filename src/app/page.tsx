@@ -4,7 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { client } from "@/lib/client";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useUsername } from "@/hooks/use-username";
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 
 export default function Page() {
   return (
@@ -22,12 +22,17 @@ function Lobby() {
   const wasDestroyed = searchParams.get("destroyed") === "true";
   const error = searchParams.get("error");
 
+  const [mins, setMins] = useState<number>(10);
+  const [errorMins, setErrorMins] = useState<string>("");
+
   const { mutate: createRoom } = useMutation({
     mutationFn: async () => {
-      const res = await client.room.create.post();
+      const res = await client.room.create.post({ ttl: mins });
 
       if (res.status === 200) {
         router.push(`/room/${res.data?.roomId}`);
+      } else if (res.status === 422) {
+        setErrorMins(res.error?.value.message as string);
       }
     },
   });
@@ -35,6 +40,14 @@ function Lobby() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-4">
       <div className="w-full max-w-md space-y-8">
+        {errorMins.length > 0 && errorMins !== "" && (
+          <div className="bg-red-950/50 border border-red-900 p-4 text-center">
+            <p className="text-red-500 text-sm font-bold">
+              CAN&apos;T CREATE A ROOM
+            </p>
+            <p className="text-zinc-500 text-xs mt-1">{errorMins}</p>
+          </div>
+        )}
         {wasDestroyed && (
           <div className="bg-red-950/50 border border-red-900 p-4 text-center">
             <p className="text-red-500 text-sm font-bold">ROOM DESTROYED</p>
@@ -71,12 +84,27 @@ function Lobby() {
         <div className="border border-zinc-800 bg-zinc-900/50 p-6 backdrop-blur-md">
           <div className="space-y-5">
             <div className="space-y-2">
-              <label className="flex items-center text-zinc-500">
-                Your Identity
-              </label>
+              <div className="flex items-center justify-center">
+                <label className="flex-3 items-center text-zinc-500">
+                  Your Identity
+                </label>
+                <label className="flex-1 text-zinc-500">Mins</label>
+              </div>
               <div className="flex items-center gap-3">
                 <div className="flex-1 bg-zinc-950 border border-zinc-800 p-3 text-sm text-zinc-400 font-mono">
                   {username}
+                </div>
+                <div
+                  className={`bg-zinc-950 border  p-3 text-sm text-zinc-400 font-mono w-1/4 ${
+                    errorMins !== "" ? "border-red-500" : "border-zinc-800"
+                  }`}
+                >
+                  <input
+                    value={mins}
+                    onChange={(e) => setMins(parseInt(e.target.value))}
+                    type="number"
+                    className="w-full outline-none placeholder:text-center text-center"
+                  />
                 </div>
               </div>
             </div>
