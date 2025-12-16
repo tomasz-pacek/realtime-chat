@@ -1,36 +1,24 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<h1>💬 Realtime Chat</h1>
 
-## Getting Started
+<h2>About the Project</h2>
+I built a secure real-time chat application using Next.js, TailwindCSS, ElysiaJS (end-to-end type-safe framework), Redis, and Upstash. <br/> It allows users to create private chats that self-destruct after a set period, ensuring privacy and security. Token-based authentication ensures that no unauthorized user can access chat data.
+<h2>Features</h2>
+<ol>
+  <li>Real-time messaging using Upstash Realtime</li>
+  <li>Private chats with automatic self-destruction</li>
+  <li>Temporary chat storage in Redis with serverless Upstash</li>
+  <li>Responsive UI with TailwindCSS</li>
+</ol>
 
-First, run the development server:
+<h2>Key learnings</h2>
+<ol>
+  <li>Implemented end-to-end type safety with TypeScript and ElysiaJS</li>
+  <li>Developed real-time data handling using Redis hashes and Upstash channels</li>
+  <li>Managed data fetching and mutations with TanStack Query</li>
+</ol>
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+![Site preview](flashcard-app-site-preview.png)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+<h2>Live Preview</h2>
+<a href="https://realtime-chat-pi-drab.vercel.app" target="_blank">Realtime Chat</a>
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
