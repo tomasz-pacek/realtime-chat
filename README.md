@@ -17,7 +17,7 @@ I built a secure real-time chat application using Next.js, TailwindCSS, ElysiaJS
   <li>Managed data fetching and mutations with TanStack Query</li>
 </ol>
 
-![Site preview](flashcard-app-site-preview.png)
+![Site preview](realtime-chat-site-preview.gif)
 
 <h2>Live Preview</h2>
 <a href="https://realtime-chat-pi-drab.vercel.app" target="_blank">Realtime Chat</a>
