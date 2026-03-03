@@ -7,6 +7,14 @@ export const proxy = async (req: NextRequest) => {
 
   if (pathname.startsWith("/_next")) return NextResponse.next();
 
+  // Ignoruj boty robiące link preview (Discord, Slack, Twitter, itp.)
+  const userAgent = req.headers.get("user-agent") ?? "";
+  const isBotOrCrawler =
+    /bot|crawler|spider|discord|slack|twitter|facebook|whatsapp|telegram|preview|unfurl|embed/i.test(
+      userAgent,
+    );
+  if (isBotOrCrawler) return NextResponse.next();
+
   const roomMatch = pathname.match(/^\/room\/([^/]+)$/);
   if (!roomMatch) return NextResponse.redirect(new URL("/", req.url));
 
